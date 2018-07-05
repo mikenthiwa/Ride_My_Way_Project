@@ -4,7 +4,6 @@
 Ride-my App(apiv3) is a carpooling api that provides drivers with the ability to create ride offers and passengers  to join available ride offers.
 
 ***
-
 ![Home Image](https://raw.github.com/mikenthiwa/Ride-My-Way/apiv1/img.png)
 
 ## Getting Started
