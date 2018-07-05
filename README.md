@@ -1,3 +1,7 @@
+[![Coverage Status](https://coveralls.io/repos/github/mikenthiwa/Ride_My_Way_Project/badge.svg?branch=apiv3)](https://coveralls.io/github/mikenthiwa/Ride_My_Way_Project?branch=apiv3)
+[![Build Status](https://travis-ci.org/mikenthiwa/Ride_My_Way_Project.svg?branch=apiv3)](https://travis-ci.org/mikenthiwa/Ride_My_Way_Project)
+[![PEP8](https://img.shields.io/badge/code%20style-pep8-orange.svg)](https://www.python.org/dev/peps/pep-0008/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 # Ride-My-Way
 
