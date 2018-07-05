@@ -2,7 +2,6 @@
 import os
 import jwt
 from werkzeug.security import generate_password_hash, check_password_hash
-from app import request
 import datetime
 import psycopg2
 from instance.config import config, Config
@@ -23,13 +22,13 @@ def create_tables():
         """ CREATE TABLE rides (
                        ride_id SERIAL PRIMARY KEY,
                        route VARCHAR(155) NOT NULL,
-                       driver VARCHAR(150) NOT NULL,
-                       time VARCHAR(150) NOT NULL)
+                       driver VARCHAR(150) NOT NULL)
         """,
         """ CREATE TABLE request (
                        id SERIAL PRIMARY KEY,
                        username VARCHAR(155) NOT NULL,
                        pickup_point VARCHAR(150) NOT NULL,
+                       time VARCHAR(150) NOT NULL,
                        accept BOOLEAN NULL)
         """
         )
@@ -210,55 +209,94 @@ class Users:
 class Rides:
     """Contains methods for class ride"""
 
-    def __init__(self, route, time, driver):
+    def __init__(self, route, driver):
         self.route = route
         self.driver = driver
-        self.time = time
-
 
     def add_ride(self):
         """Add new ride"""
         conn = psycopg2.connect(os.getenv('database'))
         cur = conn.cursor()
 
-        query = "INSERT INTO rides (route, driver, time) VALUES " \
-                "('" + self.route + "', '"+ self.driver + "', '" + self.time + "')"
+        query = "INSERT INTO rides (route, driver) VALUES " \
+                "('" + self.route + "', '"+ self.driver + "')"
 
         cur.execute(query)
         conn.commit()
         conn.close()
         return {"msg": "Ride has been successfully added"}
 
-
     @staticmethod
-    def get_rides(ride_id):
+    def get_rides():
         """Gets all rides"""
         conn = psycopg2.connect(os.getenv('database'))
         cur = conn.cursor()
-        cur.execute("SELECT ride_id, route, driver, time from rides")
+        cur.execute("SELECT ride_id, route, driver from rides")
         rows = cur.fetchall()
 
         output = {}
         for row in rows:
             ride_id = row[0]
-            output[ride_id] = {"route": row[1], "time": row[2], "driver": row[3]}
-        if ride_id not in output:
-            return {"msg": "invalid id"}, 404
+            output[ride_id] = {"route": row[1],  "driver": row[2]}
+
         return output
 
+
     @staticmethod
-    def request_ride(username, pickup_point):
+    def get_ride(ride_id):
+        """Gets a ride"""
+        conn = psycopg2.connect(os.getenv('database'))
+        cur = conn.cursor()
+        cur.execute("SELECT ride_id, route, driver from rides")
+        rows = cur.fetchall()
+
+        output = {}
+        for row in rows:
+            id = row[0]
+            output[id] = {"route": row[1], "driver": row[2]}
+        if ride_id not in output:
+            return {"msg": "invalid id"}, 404
+        ride = output[ride_id]
+
+        return ride
+
+    @staticmethod
+    def request_ride(ride_id, username, pickup_point, time):
         """Request a ride"""
 
         conn = psycopg2.connect(os.getenv('database'))
         cur = conn.cursor()
+        cur.execute("SELECT ride_id, route, driver from rides")
+        rows = cur.fetchall()
 
-        query = "INSERT INTO request (username, pickup_point) VALUES " \
-                "('" + username + "', '" + pickup_point + "')"
+        output = {}
+        for row in rows:
+            id = row[0]
+            output[id] = {"route": row[1], "driver": row[2]}
+        if ride_id not in output:
+            return {"msg": "invalid id"}, 404
+
+        query = "INSERT INTO request (username, pickup_point, time) VALUES " \
+                "('" + username + "', '" + pickup_point + "', '" + time + "')"
         cur.execute(query)
         conn.commit()
         conn.close()
         return {"msg": "You have successfully requested a ride"}
+
+    @staticmethod
+    def get_all_requested_rides():
+        """Driver can request all rides"""
+
+        conn = psycopg2.connect(os.getenv('database'))
+        cur = conn.cursor()
+        cur.execute("SELECT id, username, pickup_point, time, accept from request")
+        rows = cur.fetchall()
+        output = {}
+        for row in rows:
+            request_id = row[0]
+            output[request_id] = {"ride_id": row[0], "username": row[1], "pickup_point": row[3]}
+
+        return output
 
     @staticmethod
     def accept_ride_taken(ride_id):
