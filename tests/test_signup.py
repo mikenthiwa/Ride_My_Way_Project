@@ -17,6 +17,10 @@ class SignUpEndpoint(ConfigTestCase):
         self.assertEqual(response.status_code, 201)
         self.assertIn("You have been successfully added", str(response.data))
 
+        user2 = {"username": "teddy", "email": "teddy@gmail.com", "password": '123456789'}
+        response = self.client().post('/api/v3/auth/signup', data=json.dumps(user), content_type='application/json')
+        self.assertIn("email is already available", str(response.data))
+
     def test_successful_driver_sign_up(self):
         """Test API can register driver successful"""
 
@@ -34,9 +38,11 @@ class SignUpEndpoint(ConfigTestCase):
 
     def test_available_email(self):
         """Test API can detect"""
-        user = {"username": "driver", "email": "test_driver@gmail.com", "password": '123456789', "is_driver": True}
-        response = self.client().post('/api/v3/auth/signup', data=json.dumps(user), content_type='application/json')
+        user_driver = {"username": "driver", "email": "test_driver@gmail.com", "password": '123456789', "is_driver": True}
+        response = self.client().post('/api/v3/auth/signup', data=json.dumps(user_driver), content_type='application/json')
         self.assertIn("email is already available", str(response.data))
+
+
 
 if __name__ == '__main__':
     unittest.main()

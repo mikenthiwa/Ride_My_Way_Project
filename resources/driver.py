@@ -27,13 +27,57 @@ class DriverRide(Resource):
         res = Rides(args['route'], args['driver'])
         return res.add_ride(), 201
 
+class ModifyRide(Resource):
+    "Contain GET PUT method"
+
+    parser = reqparse.RequestParser()
+    parser.add_argument('route', type=str, required=False, location=['json'])
+    parser.add_argument("driver", type=str, required=False, location=['json'])
+
+    @api.expect(ride_model)
+    @api.doc(security='apikey')
+    @driver_required
+    def put(self, ride_id):
+        """Modifying ride detail"""
+
+        args = self.parser.parse_args()
+        route = args['route']
+        driver = args['driver']
+
+        if route:
+            res = Rides.modify_route(ride_id=ride_id, route=route)
+            return res
+
+        elif driver:
+            res = Rides.modify_driver(ride_id=ride_id, driver=driver)
+            return res
+
+        else:
+            return {"msg": "At least one field is required"}
+
+    @api.doc(security='apikey')
+    @driver_required
+    def delete(self, ride_id):
+        res = Rides.delete_ride(ride_id=ride_id)
+        return res
+
+
 class RequestedRide(Resource):
     """Contain GET method"""
 
-    # @driver_required
+    @driver_required
     def get(self):
         res = Rides.get_all_requested_rides()
         return res
+
+class RequestRidebyId(Resource):
+    """Contain get method"""
+
+    @driver_required
+    def get(self, ride_id):
+        res = Rides.get_all_requested_ride_by_id(ride_id=ride_id)
+        return res
+
 
 class AcceptRide(Resource):
 
@@ -49,4 +93,6 @@ class AcceptRide(Resource):
 
 api.add_resource(DriverRide, '/rides')
 api.add_resource(AcceptRide, '/rides/<int:ride_id>/accept')
+api.add_resource(ModifyRide, '/rides/<int:ride_id>')
 api.add_resource(RequestedRide, '/requested', endpoint='requested')
+api.add_resource(RequestRidebyId, '/rides/<int:ride_id>/requests')

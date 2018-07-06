@@ -18,6 +18,11 @@ class DriversEndpoint(ConfigTestCase):
         self.assertIn("Ride has been successfully added", str(res.data))
         self.assertEqual(res.status_code, 201)
 
+        res2 = self.client().post('/api/v3/rides', data=json.dumps(ride), content_type='application/json',
+                                 headers=self.driver_header)
+        self.assertIn("Ride already exists", str(res2.data))
+
+
     def test_get_ride(self):
         """Test API can get ride for driver"""
 
@@ -45,6 +50,46 @@ class DriversEndpoint(ConfigTestCase):
         res = self.client().get('/api/v3/requested', headers=self.driver_header)
         self.assertIn("Ken", str(res.data))
         self.assertEqual(res.status_code, 200)
+
+    def test_modify_route(self):
+        """Test API can modify route"""
+        route = {"route": "Nakuru - Naivasha"}
+        response = self.client().put('/api/v3/rides/1', data=json.dumps(route), content_type='application/json',
+                                     headers=self.driver_header)
+        self.assertEqual(response.status_code, 200)
+        self.assertIn("Route has been successfully modified", str(response.data))
+
+
+    def test_modify_ride_driver(self):
+        """Test API can modify driver's name"""
+        driver = {"driver": "Francis Ole Kaparo"}
+        response = self.client().put('/api/v3/rides/1', data=json.dumps(driver), content_type='application/json',
+                                     headers=self.driver_header)
+        self.assertEqual(response.status_code, 200)
+        self.assertIn("Driver has been successfully modified", str(response.data))
+
+    def test_delete_ride(self):
+        """Test API can delete ride"""
+
+        response = self.client().delete('api/v3/rides/1', headers=self.driver_header)
+        self.assertIn("Ride has been successfully deleted", str(response.data))
+        self.assertEqual(response.status_code, 200)
+
+    def test_modify_ride_driver_using_empty_filds(self):
+        """Test API can modify driver's name"""
+        data = {}
+        response = self.client().put('/api/v3/rides/1', data=json.dumps(data), content_type='application/json',
+                                     headers=self.driver_header)
+        self.assertEqual(response.status_code, 200)
+        self.assertIn("At least one field is required", str(response.data))
+
+    def test_all_requested_ride_by_id(self):
+        """Test API get all_requested ride by id"""
+
+        response = self.client().get('/api/v3/rides/1/requests',  content_type='application/json',
+                                     headers=self.driver_header)
+        self.assertIn("TRM", str(response.data))
+
 
 if __name__ == '__main__':
     unittest.main()

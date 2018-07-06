@@ -26,6 +26,7 @@ def create_tables():
         """,
         """ CREATE TABLE request (
                        id SERIAL PRIMARY KEY,
+                       ride_id int NOT NULL,
                        username VARCHAR(155) NOT NULL,
                        pickup_point VARCHAR(150) NOT NULL,
                        time VARCHAR(150) NOT NULL,
@@ -163,7 +164,7 @@ class Users:
             user_email = row[0]
             output[user_email] = {'username': row[1], 'password': row[2], 'is_driver': row[3], 'is_admin': row[4]}
         if email not in output:
-            return {"msg": 'email is already available'}
+            return {"msg": "Invalid email"}
         cur.execute("UPDATE users set username = '" + username + "' where email = '" + email + "'")
         conn.commit()
 
@@ -182,10 +183,10 @@ class Users:
             user_email = row[0]
             output[user_email] = {'username': row[1], 'password': row[2], 'is_driver': row[3], 'is_admin': row[4]}
         if email not in output:
-            return {"msg": 'email is already available'}
+            return {"msg": 'invalid email'}
         cur.execute("UPDATE users set is_admin = '" + '1' + "' where email = '" + email + "'")
         conn.commit()
-        return {"msg": 'user is admin!'}
+        return {"msg": 'User is admin'}
 
     @staticmethod
     def reset_password(email, password):
@@ -200,9 +201,10 @@ class Users:
             user_email = row[0]
             output[user_email] = {'username': row[1], 'password': row[2], 'is_driver': row[3], 'is_admin': row[4]}
         if email not in output:
-            return {"msg": 'user is admin!'}
+            return {"msg": 'Invalid email'}
         cur.execute("UPDATE users set password = '" + password + "' where email = '" + email + "'")
         conn.commit()
+        return {"msg": "password changed!"}
 
 
 
@@ -217,14 +219,17 @@ class Rides:
         """Add new ride"""
         conn = psycopg2.connect(os.getenv('database'))
         cur = conn.cursor()
+        cur.execute("SELECT * from rides where route='{}'".format(self.route))
+        rows = cur.fetchone()
+        if rows is None:
+            query = "INSERT INTO rides (route, driver) VALUES " \
+                    "('" + self.route + "', '"+ self.driver + "')"
 
-        query = "INSERT INTO rides (route, driver) VALUES " \
-                "('" + self.route + "', '"+ self.driver + "')"
-
-        cur.execute(query)
-        conn.commit()
-        conn.close()
-        return {"msg": "Ride has been successfully added"}
+            cur.execute(query)
+            conn.commit()
+            conn.close()
+            return {"msg": "Ride has been successfully added"}
+        return {"msg": "Ride already exists"}
 
     @staticmethod
     def get_rides():
@@ -255,7 +260,7 @@ class Rides:
             id = row[0]
             output[id] = {"route": row[1], "driver": row[2]}
         if ride_id not in output:
-            return {"msg": "invalid id"}, 404
+            return {"msg": "ride is not available"}, 404
         ride = output[ride_id]
 
         return ride
@@ -267,6 +272,7 @@ class Rides:
         conn = psycopg2.connect(os.getenv('database'))
         cur = conn.cursor()
         cur.execute("SELECT ride_id, route, driver from rides")
+
         rows = cur.fetchall()
 
         output = {}
@@ -274,14 +280,19 @@ class Rides:
             id = row[0]
             output[id] = {"route": row[1], "driver": row[2]}
         if ride_id not in output:
-            return {"msg": "invalid id"}, 404
+            return {"msg": "ride is not available"}, 404
 
-        query = "INSERT INTO request (username, pickup_point, time) VALUES " \
-                "('" + username + "', '" + pickup_point + "', '" + time + "')"
-        cur.execute(query)
-        conn.commit()
-        conn.close()
-        return {"msg": "You have successfully requested a ride"}
+        cur.execute("SELECT * from request where username='{}'".format(username))
+        rows_request = cur.fetchone()
+        if rows_request is None:
+            query = "INSERT INTO request (ride_id, username, pickup_point, time, accept) VALUES " \
+                    "('" + str(ride_id) + "', '" + username + "', '" + pickup_point + "', '" + time + "', '" + '0'+ "')"
+            cur.execute(query)
+            conn.commit()
+            conn.close()
+            return {"msg": "You have successfully requested a ride"}
+        return {"msg": "you have already requested"}
+
 
     @staticmethod
     def get_all_requested_rides():
@@ -297,6 +308,24 @@ class Rides:
             output[request_id] = {"ride_id": row[0], "username": row[1], "pickup_point": row[3]}
 
         return output
+
+    @staticmethod
+    def get_all_requested_ride_by_id(ride_id):
+        conn = psycopg2.connect(os.getenv('database'))
+        cur = conn.cursor()
+        cur.execute("SELECT * from request where ride_id='{}'".format(ride_id))
+        rows = cur.fetchone()
+        if rows is None:
+            return {"msg": "Ride is not available"}
+        return {"request_id": rows[0],
+                "username": rows[2],
+                "pickup_point": rows[3],
+                "time": rows[4]}
+
+
+
+
+        # return output
 
     @staticmethod
     def accept_ride_taken(ride_id):
@@ -316,4 +345,67 @@ class Rides:
         conn.commit()
 
         return {"msg": "You have confirmed ride taken"}
+
+    @staticmethod
+    def modify_driver(ride_id, driver):
+        """Changes details of a driver"""
+
+        conn = psycopg2.connect(os.getenv('database'))
+        cur = conn.cursor()
+        cur.execute("SELECT ride_id, route, driver from rides")
+        rows = cur.fetchall()
+
+        output = {}
+        for row in rows:
+            id = row[0]
+            output[id] = {"driver": row[2]}
+        if ride_id not in output:
+            return {"msg": "Ride is not available"}, 404
+        cur.execute("UPDATE rides set driver = '" + driver + "' where ride_id = '" + str(ride_id) + "'")
+        conn.commit()
+
+        return {"msg": "Driver has been successfully modified"}
+
+    @staticmethod
+    def modify_route(ride_id, route):
+        """Changes details of a route"""
+
+        conn = psycopg2.connect(os.getenv('database'))
+        cur = conn.cursor()
+        cur.execute("SELECT ride_id, route from rides")
+        rows = cur.fetchall()
+
+        output = {}
+        for row in rows:
+            id = row[0]
+
+            output[id] = {"route": row[1]}
+
+        if ride_id in output:
+            cur.execute("UPDATE rides set route = '" + route + "' where ride_id = '" + str(ride_id) + "'")
+            conn.commit()
+
+            return {"msg": "Route has been successfully modified"}
+        return {"msg": "Ride is not available"}, 404
+
+
+
+    @staticmethod
+    def delete_ride(ride_id):
+        """Deleting a particular ride"""
+        conn = psycopg2.connect(os.getenv('database'))
+        cur = conn.cursor()
+        cur.execute("SELECT ride_id from rides")
+        rows = cur.fetchall()
+
+        output = []
+        for row in rows:
+            id = row[0]
+            output.append(id)
+
+        if ride_id not in output:
+            return {"msg": "Ride is not available"}
+        cur.execute("DELETE from rides where ride_id = '" + str(ride_id) + "'")
+        conn.commit()
+        return {"msg": "Ride has been successfully deleted"}
 
