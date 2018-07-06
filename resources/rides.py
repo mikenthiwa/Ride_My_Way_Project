@@ -9,8 +9,7 @@ import jwt
 
 api = Namespace("Rides",  description="Passenger related operations")
 
-request_model = api.model('Request Model', {"username": fields.String,
-                                            "pickup_point": fields.String,
+request_model = api.model('Request Model', {"pickup_point": fields.String,
                                             "time": fields.String})
 
 class RideList(Resource):
