@@ -57,6 +57,7 @@ class RequestRide(Resource):
         return res
 
 
+
 api.add_resource(RideList, '/rides', endpoint='ridelist')
 api.add_resource(Ride, '/rides/<int:ride_id>')
 api.add_resource(RequestRide, '/rides/<int:ride_id>/requests')
