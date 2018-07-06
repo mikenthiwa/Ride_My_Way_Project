@@ -10,8 +10,7 @@ import jwt
 
 
 api = Namespace("Driver",  description="Driver related operations")
-ride_model = api.model("Ride", {'route': fields.String,
-                                'driver': fields.String})
+ride_model = api.model("Ride", {'route': fields.String})
 
 
 class DriverRide(Resource):

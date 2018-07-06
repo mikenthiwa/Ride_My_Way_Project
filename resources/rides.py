@@ -51,7 +51,6 @@ class RequestRide(Resource):
         data = jwt.decode(token, Config.SECRET)
         driver_name = data['username']
         args = parser.parse_args()
-
         pickup_point = args['pickup_point']
         time = args['time']
 
