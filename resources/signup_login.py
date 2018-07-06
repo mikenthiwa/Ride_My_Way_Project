@@ -76,6 +76,9 @@ class Login(Resource):
         email = args['email']
         password = args['password']
 
+        if not re.match(EMAIL_REGEX, email):
+            return {"msg": "Email entered is invalid"}
+
         res = Users.login(email=email, password=password)
         return res
 
