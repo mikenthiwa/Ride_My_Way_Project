@@ -56,7 +56,7 @@ class Register(Resource):
 class Login(Resource):
     """class contain post method"""
     req_data = reqparse.RequestParser()
-    req_data.add_argument('email', required=True, help='username required', location=['json'],
+    req_data.add_argument('email', required=True, help='email required', location=['json'],
                           type=inputs.regex(r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)"))
 
     req_data.add_argument('password', required=True, help='password required', location=['json'])
