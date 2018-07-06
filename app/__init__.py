@@ -42,4 +42,9 @@ def create_app(config_name):
     from resources.admin import api as admin
     api.add_namespace(admin, path='/api/v3')
 
+
+    from resources.users import api as users
+    api.add_namespace(users, path='/api/v3')
+
+
     return app
