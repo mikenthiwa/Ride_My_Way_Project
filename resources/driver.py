@@ -69,6 +69,7 @@ class ModifyRide(Resource):
 class RequestedRide(Resource):
     """Contain GET method"""
 
+    @api.doc(security='apikey')
     @driver_required
     def get(self):
         res = Rides.get_all_requested_rides()
@@ -77,6 +78,7 @@ class RequestedRide(Resource):
 class RequestRidebyId(Resource):
     """Contain get method"""
 
+    @api.doc(security='apikey')
     @driver_required
     def get(self, ride_id):
         res = Rides.get_all_requested_ride_by_id(ride_id=ride_id)

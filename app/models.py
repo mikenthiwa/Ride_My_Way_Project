@@ -84,7 +84,8 @@ class Users:
 
     @staticmethod
     def login(email, password):
-        """Login registered users"""
+        """Login registered users:
+        Parameters required email, password"""
 
         conn = psycopg2.connect(os.getenv('database'))
         cur = conn.cursor()
@@ -119,7 +120,8 @@ class Users:
 
     @staticmethod
     def get_a_user(email):
-        """Get a specific user"""
+        """Get a specific user
+        parameters required email"""
 
         conn = psycopg2.connect(os.getenv('database'))
         cur = conn.cursor()
@@ -190,7 +192,8 @@ class Users:
 
     @staticmethod
     def reset_password(email, password):
-
+        """Parameter required:
+        email, password"""
         conn = psycopg2.connect(os.getenv('database'))
         cur = conn.cursor()
         cur.execute("SELECT email, username, password, is_driver, is_admin from users")
@@ -249,7 +252,8 @@ class Rides:
 
     @staticmethod
     def get_ride(ride_id):
-        """Gets a ride"""
+        """Parameter:
+        Ride_Id"""
         conn = psycopg2.connect(os.getenv('database'))
         cur = conn.cursor()
         cur.execute("SELECT ride_id, route, driver from rides")
@@ -267,7 +271,8 @@ class Rides:
 
     @staticmethod
     def request_ride(ride_id, username, pickup_point, time):
-        """Request a ride"""
+        """Request a ride
+        Parameters: ride_id, username, pickup_point, time"""
 
         conn = psycopg2.connect(os.getenv('database'))
         cur = conn.cursor()

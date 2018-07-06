@@ -19,7 +19,7 @@ class RideList(Resource):
     @token_required
     def get(self):
 
-        """Get all rides endpoint"""
+        """Get all rides """
         response = Rides.get_rides()
         return response
 
@@ -41,7 +41,7 @@ class RequestRide(Resource):
     @api.doc(security='apikey')
     @token_required
     def post(self, ride_id):
-        """Request ride"""
+        """Request ride: ride_id"""
         parser = reqparse.RequestParser()
 
         parser.add_argument('pickup_point', required=True, type=str, help='Pickup_point is required', location=['json'])
