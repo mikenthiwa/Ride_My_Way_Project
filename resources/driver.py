@@ -3,6 +3,9 @@
 from flask_restplus import Resource, Namespace, reqparse, fields
 from app.models import Rides
 from resources.auth import driver_required
+from instance.config import Config
+from flask import request
+import jwt
 
 
 
@@ -21,10 +24,12 @@ class DriverRide(Resource):
         """Add a ride endpoint"""
         parser = reqparse.RequestParser()
         parser.add_argument('route', type=str, required=True, help="Route is not provided", location=['json'])
-        parser.add_argument("driver", type=str, required=True, help="Time is not provided", location=['json'])
+        token = request.headers['x-access-token']
+        data = jwt.decode(token, Config.SECRET)
+        driver = data['username']
 
         args = parser.parse_args()
-        res = Rides(args['route'], args['driver'])
+        res = Rides(args['route'], driver=driver)
         return res.add_ride(), 201
 
 class ModifyRide(Resource):
