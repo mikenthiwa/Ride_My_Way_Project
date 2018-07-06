@@ -9,7 +9,8 @@ class AdminEndpoint(ConfigTestCase):
     """This class represents admin test cases"""
 
     def test_promote_user(self):
-        """Test API can promote user"""
+        """Parameter:
+        admin token"""
 
         response = self.client().patch('/api/v3/admin/users/test_user@gmail.com', headers=self.admin_header)
         self.assertEqual(response.status_code, 200)
@@ -22,13 +23,15 @@ class AdminEndpoint(ConfigTestCase):
 
 
     def test_get_users(self):
-        """Test API can get all users"""
+        """Parameter:
+        admin header"""
 
         res = self.client().get('api/v3/admin/users', headers=self.admin_header)
         self.assertEqual(res.status_code, 200)
 
     def test_get_a_user(self):
-        """Test API can get a user"""
+        """Parameter:
+        admin header"""
         response = self.client().get('/api/v3/admin/users/test_user@gmail.com', headers=self.admin_header)
         self.assertEqual(response.status_code, 200)
 

@@ -301,7 +301,7 @@ class Rides:
 
     @staticmethod
     def get_all_requested_rides():
-        """Driver can request all rides"""
+        """Driver gets all requested ride"""
 
         conn = psycopg2.connect(os.getenv('database'))
         cur = conn.cursor()
@@ -329,12 +329,9 @@ class Rides:
 
 
 
-
-        # return output
-
     @staticmethod
     def accept_ride_taken(ride_id):
-        """Driver can accept a ride selected"""
+        """Parameter: ride_id"""
 
         conn = psycopg2.connect(os.getenv('database'))
         cur = conn.cursor()
@@ -353,7 +350,8 @@ class Rides:
 
     @staticmethod
     def modify_driver(ride_id, driver):
-        """Changes details of a driver"""
+        """Parameter:
+        ride_id, driver"""
 
         conn = psycopg2.connect(os.getenv('database'))
         cur = conn.cursor()
@@ -373,7 +371,8 @@ class Rides:
 
     @staticmethod
     def modify_route(ride_id, route):
-        """Changes details of a route"""
+        """Parameter:
+        ride_id, route"""
 
         conn = psycopg2.connect(os.getenv('database'))
         cur = conn.cursor()
@@ -397,7 +396,8 @@ class Rides:
 
     @staticmethod
     def delete_ride(ride_id):
-        """Deleting a particular ride"""
+        """Parameter:
+        ride_id"""
         conn = psycopg2.connect(os.getenv('database'))
         cur = conn.cursor()
         cur.execute("SELECT ride_id from rides")

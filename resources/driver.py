@@ -42,7 +42,8 @@ class ModifyRide(Resource):
     @api.doc(security='apikey')
     @driver_required
     def put(self, ride_id):
-        """Modifying ride detail"""
+        """Modifying ride detail
+        Parameters ride_id"""
 
         args = self.parser.parse_args()
         route = args['route']
@@ -72,27 +73,30 @@ class RequestedRide(Resource):
     @api.doc(security='apikey')
     @driver_required
     def get(self):
+        """Get all requested ride"""
         res = Rides.get_all_requested_rides()
         return res
 
 class RequestRidebyId(Resource):
-    """Contain get method"""
+    """Contains get method"""
 
     @api.doc(security='apikey')
     @driver_required
     def get(self, ride_id):
+        """Get requested ride
+        Parameter ride_id"""
         res = Rides.get_all_requested_ride_by_id(ride_id=ride_id)
         return res
 
 
 class AcceptRide(Resource):
 
-    """Contain PATCH method"""
+    """Contain PUT method"""
 
     @api.doc(security='apikey')
     # @driver_required
     def put(self, ride_id):
-        """Driver accepts ride taken by passenger"""
+        """Parameter: ride_id"""
 
         res = Rides.accept_ride_taken(ride_id=ride_id)
         return res
