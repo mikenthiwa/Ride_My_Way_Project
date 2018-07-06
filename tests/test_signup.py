@@ -34,10 +34,11 @@ class SignUpEndpoint(ConfigTestCase):
 
         user = {"username": '', "email": 'teddy@gmail.com', "password": '123456789'}
         response = self.client().post('/api/v3/auth/signup', data=json.dumps(user), content_type='application/json')
-        self.assertIn("Field cannot be empty", str(response.data))
+        self.assertIn("Username cannot be empty", str(response.data))
 
     def test_available_email(self):
         """Test API can detect"""
+
         user_driver = {"username": "driver", "email": "test_driver@gmail.com", "password": '123456789', "is_driver": True}
         response = self.client().post('/api/v3/auth/signup', data=json.dumps(user_driver), content_type='application/json')
         self.assertIn("email is already available", str(response.data))

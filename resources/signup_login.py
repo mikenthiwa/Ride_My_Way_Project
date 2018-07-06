@@ -2,7 +2,9 @@
 
 from flask_restplus import Namespace, Resource, fields, reqparse, inputs
 from app.models import Users
+import re
 
+EMAIL_REGEX = re.compile(r"^[a-zA-Z0-9_\.]+@[a-zA-Z0-9\.]+\.[a-zA-Z]*$")
 
 
 api = Namespace('SignUp and Login', description='Sign-up and Login')
@@ -22,8 +24,7 @@ class Register(Resource):
     parser = reqparse.RequestParser()
     parser.add_argument('username', required=True, help="No username provided", location=['json'])
 
-    parser.add_argument('email', required=True, help="No email provided", location=['json'],
-                        type=inputs.regex(r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)"))
+    parser.add_argument('email', required=True, help="No email provided", location=['json'])
 
     parser.add_argument('password', required=True, help="No password provided", location=['json'])
 
@@ -41,9 +42,16 @@ class Register(Resource):
         driver = args['is_driver']
 
 
+        if username == "":
+            return {"msg": "Username cannot be empty"}
+        if email == "":
+            return {"msg": "Email cannot be empty"}
 
-        if username == "" or email == "" or password == "" or driver == "":
-            return {"msg": "Field cannot be empty"}
+        if not re.match(EMAIL_REGEX, email):
+            return {"msg": "Email entered is invalid"}
+
+        if password == "":
+            return {"msg": "Password cannot be empty"}
 
         if driver == "True":
             driver_res = Users(username=username, email=email, password=password, is_driver=True)
@@ -56,8 +64,7 @@ class Register(Resource):
 class Login(Resource):
     """class contain post method"""
     req_data = reqparse.RequestParser()
-    req_data.add_argument('email', required=True, help='email required', location=['json'],
-                          type=inputs.regex(r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)"))
+    req_data.add_argument('email', required=True, help='email required', location=['json'])
 
     req_data.add_argument('password', required=True, help='password required', location=['json'])
 
@@ -68,6 +75,7 @@ class Login(Resource):
         args = self.req_data.parse_args(strict=True)
         email = args['email']
         password = args['password']
+
         res = Users.login(email=email, password=password)
         return res
 
