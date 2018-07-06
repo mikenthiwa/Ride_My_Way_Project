@@ -1,6 +1,10 @@
 from flask_restplus import Resource, Namespace, reqparse, fields
 from app.models import Rides
 from resources.auth import token_required
+from instance.config import Config
+from flask import request
+import jwt
+
 
 
 api = Namespace("Rides",  description="Passenger related operations")
@@ -40,16 +44,18 @@ class RequestRide(Resource):
     def post(self, ride_id):
         """Request ride"""
         parser = reqparse.RequestParser()
-        parser.add_argument('username', required=True, type=str, help='Pickup_point is required', location=['json'])
+
         parser.add_argument('pickup_point', required=True, type=str, help='Pickup_point is required', location=['json'])
         parser.add_argument('time', required=True, type=str, help='Pickup_point is required', location=['json'])
-
+        token = request.headers['x-access-token']
+        data = jwt.decode(token, Config.SECRET)
+        driver_name = data['username']
         args = parser.parse_args()
-        username = args['username']
+
         pickup_point = args['pickup_point']
         time = args['time']
 
-        res = Rides.request_ride(ride_id=ride_id, username=username, pickup_point=pickup_point, time=time)
+        res = Rides.request_ride(ride_id=ride_id, username=driver_name, pickup_point=pickup_point, time=time)
         return res
 
 
