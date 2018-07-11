@@ -94,15 +94,15 @@ class Users:
             "SELECT email, user_id, username, password, is_driver, is_admin from users where email='{}'".format(email))
         rows = cur.fetchone()
         if rows is None:
-            return {"msg": 'invalid email'}, 401
+            return {"msg": 'The email you tried to enter does not exist'}, 401
         if not check_password_hash(rows[3], password=password):
             return {"msg": "password do not match"}, 401
 
         token = jwt.encode(
             {'email': rows[0], 'user_id': rows[1], 'username': rows[2], 'is_driver': rows[4], 'is_admin': rows[5],
-             'exp': datetime.datetime.utcnow() + datetime.timedelta(weeks=12)}, os.getenv('SECRET_KEY'))
+             'exp': datetime.datetime.utcnow()}, os.getenv('SECRET_KEY'))
 
-        return {'token': token.decode('UTF-8')}
+        return {"msg": {"WELCOME TO RIDE_MY_WAY":"copy token to header to  access different functionality", 'token': token.decode('UTF-8')}}
 
     @staticmethod
     def get_all_user():

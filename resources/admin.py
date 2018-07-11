@@ -19,7 +19,8 @@ class AdminUserList(Resource):
 
 
 class AdminUser(Resource):
-    """Contain GET PUT PATCH"""
+    """Contain
+    GET PUT PATCH"""
 
     @staticmethod
     @api.doc(security='apikey')

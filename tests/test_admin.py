@@ -41,7 +41,5 @@ class AdminEndpoint(ConfigTestCase):
 
 
 
-
-
 if __name__ == '__main__':
     unittest.main()
