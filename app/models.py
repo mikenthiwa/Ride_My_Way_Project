@@ -79,8 +79,8 @@ class Users:
             conn.commit()
             conn.close()
 
-            return {"msg": "You have been successfully added"}
-        return {"msg": 'email is already available'}, 401
+            return {"msg": "You have been successfully added!, log in"}
+        return {"msg": 'Account cannot be created!, the email you entered already exists'}, 401
 
     @staticmethod
     def login(email, password):
@@ -391,7 +391,6 @@ class Rides:
 
             return {"msg": "Route has been successfully modified"}
         return {"msg": "Ride is not available"}, 404
-
 
 
     @staticmethod

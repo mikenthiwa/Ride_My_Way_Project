@@ -57,7 +57,7 @@ class Register(Resource):
             driver_res = Users(username=username, email=email, password=password, is_driver=True)
             return driver_res.add_driver()
         user_res = Users(username=username, email=email, password=password)
-        return user_res.add_users(), 201
+        return user_res.add_users()
 
 
 
