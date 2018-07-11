@@ -21,7 +21,7 @@ class LoginEndpoint(ConfigTestCase):
 
         user = {"email": "test2@gmail.com", "password": "123456789"}
         response = self.client().post('/api/v3/auth/login', data=json.dumps(user), content_type='application/json')
-        self.assertIn("invalid email", str(response.data))
+        self.assertIn("The email you tried to enter does not exist", str(response.data))
         self.assertEqual(response.status_code, 401)
 
     def test_invalid_password(self):

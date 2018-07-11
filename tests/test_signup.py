@@ -19,7 +19,7 @@ class SignUpEndpoint(ConfigTestCase):
 
         user2 = {"username": "teddy", "email": "teddy@gmail.com", "password": '123456789'}
         response = self.client().post('/api/v3/auth/signup', data=json.dumps(user), content_type='application/json')
-        self.assertIn("email is already available", str(response.data))
+        self.assertIn("Account cannot be created!, the email you entered already exists", str(response.data))
 
     def test_successful_driver_sign_up(self):
         """Test API can register driver successful"""

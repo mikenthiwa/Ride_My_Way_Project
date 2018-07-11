@@ -79,7 +79,7 @@ class Users:
             conn.commit()
             conn.close()
 
-            return {"msg": "You have been successfully added!, log in"}
+            return {"msg": "You have been successfully added!, log in"}, 201
         return {"msg": 'Account cannot be created!, the email you entered already exists'}, 401
 
     @staticmethod
@@ -100,7 +100,7 @@ class Users:
 
         token = jwt.encode(
             {'email': rows[0], 'user_id': rows[1], 'username': rows[2], 'is_driver': rows[4], 'is_admin': rows[5],
-             'exp': datetime.datetime.utcnow()}, os.getenv('SECRET_KEY'))
+             'exp': datetime.datetime.utcnow()+ datetime.timedelta(weeks=12)}, os.getenv('SECRET_KEY'))
 
         return {"msg": {"WELCOME TO RIDE_MY_WAY":"copy token to header to  access different functionality", 'token': token.decode('UTF-8')}}
 

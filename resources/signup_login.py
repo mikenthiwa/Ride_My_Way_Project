@@ -1,6 +1,6 @@
 # signup_login.py
 
-from flask_restplus import Namespace, Resource, fields, reqparse, inputs
+from flask_restplus import Namespace, Resource, fields, reqparse
 from app.models import Users
 import re
 

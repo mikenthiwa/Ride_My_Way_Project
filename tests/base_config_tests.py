@@ -66,9 +66,12 @@ class ConfigTestCase(unittest.TestCase):
             driver_token_dict = json.loads(driver_response.get_data(as_text=True))
             admin_token_dict = json.loads(admin_response.get_data(as_text=True))
 
-            user_token = user_token_dict["token"]
-            driver_token = driver_token_dict["token"]
-            admin_token = admin_token_dict["token"]
+
+            user_token = user_token_dict["msg"]["token"]
+            driver_token = driver_token_dict["msg"]["token"]
+            admin_token = admin_token_dict["msg"]["token"]
+
+
 
             self.user_header = {"Content-Type": "application/json", "x-access-token": user_token}
             self.driver_header = {"Content-Type": "application/json", "x-access-token": driver_token}
