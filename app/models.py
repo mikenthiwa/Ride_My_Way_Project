@@ -22,7 +22,10 @@ def create_tables():
         """ CREATE TABLE rides (
                        ride_id SERIAL PRIMARY KEY,
                        route VARCHAR(155) NOT NULL,
-                       driver VARCHAR(150) NOT NULL)
+                       driver VARCHAR(150) NOT NULL,
+                       vehicle_registration_plate VARCHAR(100) NOT NULL,
+                       vehicle_model VARCHAR(100) NOT NULL,
+                       vehicle_capacity int NOT NULL)
         """,
         """ CREATE TABLE request (
                        id SERIAL PRIMARY KEY,
@@ -214,9 +217,13 @@ class Users:
 class Rides:
     """Contains methods for class ride"""
 
-    def __init__(self, route, driver):
+    def __init__(self, route, driver, registration_plate, vehicle_model, vehicle_capacity):
         self.route = route
         self.driver = driver
+        self.registration_plate = registration_plate
+        self.vehicle_model = vehicle_model
+        self.vehicle_capacity = vehicle_capacity
+
 
     def add_ride(self):
         """Add new ride"""
@@ -225,8 +232,8 @@ class Rides:
         cur.execute("SELECT * from rides where route='{}'".format(self.route))
         rows = cur.fetchone()
         if rows is None:
-            query = "INSERT INTO rides (route, driver) VALUES " \
-                    "('" + self.route + "', '"+ self.driver + "')"
+            query = "INSERT INTO rides (route, driver, vehicle_registration_plate, vehicle_model, vehicle_capacity ) VALUES " \
+                    "('" + self.route + "', '"+ self.driver + "', '" + self.registration_plate + "', '" + self.vehicle_model + "', " + str(self.vehicle_capacity) + ")"
 
             cur.execute(query)
             conn.commit()
