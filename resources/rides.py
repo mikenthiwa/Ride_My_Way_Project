@@ -6,11 +6,11 @@ from flask import request
 import jwt
 
 
-
 api = Namespace("Rides",  description="Passenger related operations")
 
 request_model = api.model('Request Model', {"pickup_point": fields.String,
                                             "time": fields.String})
+
 
 class RideList(Resource):
     """Contain GET methods"""
@@ -23,6 +23,7 @@ class RideList(Resource):
         response = Rides.get_rides()
         return response
 
+
 class Ride(Resource):
     """Contains GET method"""
 
@@ -33,6 +34,7 @@ class Ride(Resource):
 
         response = Rides.get_ride(ride_id=ride_id)
         return response
+
 
 class RequestRide(Resource):
     """Contain PATCH method"""
@@ -55,7 +57,6 @@ class RequestRide(Resource):
 
         res = Rides.request_ride(ride_id=ride_id, username=driver_name, pickup_point=pickup_point, time=time)
         return res
-
 
 
 api.add_resource(RideList, '/rides', endpoint='ridelist')

@@ -101,8 +101,8 @@ class AcceptRide(Resource):
         res = Rides.accept_ride_taken(ride_id=ride_id)
         return res
 
-api.add_resource(DriverRide, '/rides')
-api.add_resource(AcceptRide, '/rides/<int:ride_id>/accept')
-api.add_resource(ModifyRide, '/rides/<int:ride_id>')
+api.add_resource(DriverRide, '/driver/rides')
+api.add_resource(AcceptRide, '/driver/rides/<int:ride_id>/accept')
+api.add_resource(ModifyRide, '/driver/rides/<int:ride_id>')
 api.add_resource(RequestedRide, '/requested', endpoint='requested')
-api.add_resource(RequestRidebyId, '/rides/<int:ride_id>/requests')
+api.add_resource(RequestRidebyId, '/driver/rides/<int:ride_id>/requests')

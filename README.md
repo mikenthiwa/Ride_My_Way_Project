@@ -129,7 +129,7 @@ pytest
 
 ## Heroku
 
-https://ridemywayapiv1.herokuapp.com/api/v3/documentation
+https://ridemywayapiv-3.herokuapp.com/api/v3/documentation
 ***
 
 ## Versioning
