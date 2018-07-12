@@ -51,13 +51,15 @@ class RequestRide(Resource):
         token = request.headers['x-access-token']
         data = jwt.decode(token, Config.SECRET)
         driver_name = data['username']
+        is_driver = data['is_driver']
         args = parser.parse_args()
         pickup_point = args['pickup_point']
         time = args['time']
 
-        res = Rides.request_ride(ride_id=ride_id, username=driver_name, pickup_point=pickup_point, time=time)
-        return res
-
+        if not is_driver:
+            res = Rides.request_ride(ride_id=ride_id, username=driver_name, pickup_point=pickup_point, time=time)
+            return res
+        return {"msg": "Driver cannot request his own ride"}
 
 api.add_resource(RideList, '/rides', endpoint='ridelist')
 api.add_resource(Ride, '/rides/<int:ride_id>')

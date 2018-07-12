@@ -17,16 +17,17 @@ def token_required(f):
             token = request.headers['x-access-token']
 
         if token is None:
-            return make_response(jsonify({"message" : "Please sign-up and login"}), 401)
+            return make_response(jsonify({"message": "Please sign-up and login"}), 401)
 
         try:
             data = jwt.decode(token, Config.SECRET)
         except:
             return make_response(jsonify({
-                "message" : "kindly provide a valid token in the header"}), 401)
+                "message": "kindly provide a valid token in the header"}), 401)
         return f(*args, **kwargs)
 
     return decorated
+
 
 def driver_required(f):
     """Checks for authenticated admins with valid token in the header"""
@@ -42,18 +43,18 @@ def driver_required(f):
 
         if token is None:
             return make_response(jsonify({
-                "message" : "Please sign-up and login"}), 401)
+                "message": "Please sign-up and login"}), 401)
 
         try:
             data = jwt.decode(token, Config.SECRET)
             driver = data['is_driver']
         except:
             return make_response(jsonify({
-                "message" : "kindly provide a valid token in the header"}), 401)
+                "message": "kindly provide a valid token in the header"}), 401)
 
         if not driver:
             return make_response(jsonify({
-                "message" : "you are not authorized to perform this function as a non-driver user"}), 401)
+                "message": "you are not authorized to perform this function as a non-driver user"}), 401)
 
         return f(*args, **kwargs)
 

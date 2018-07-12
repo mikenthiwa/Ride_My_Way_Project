@@ -94,7 +94,7 @@ class Users:
             "SELECT email, user_id, username, password, is_driver, is_admin from users where email='{}'".format(email))
         rows = cur.fetchone()
         if rows is None:
-            return {"msg": 'The email you tried to enter does not exist'}, 401
+            return {"msg": 'The email you tried to enter does not exist!, If you don''t have an account, Register!'}, 401
         if not check_password_hash(rows[3], password=password):
             return {"msg": "password do not match"}, 401
 
