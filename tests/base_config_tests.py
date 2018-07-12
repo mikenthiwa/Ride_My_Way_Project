@@ -67,9 +67,9 @@ class ConfigTestCase(unittest.TestCase):
             admin_token_dict = json.loads(admin_response.get_data(as_text=True))
 
 
-            user_token = user_token_dict["msg"]["token"]
-            driver_token = driver_token_dict["msg"]["token"]
-            admin_token = admin_token_dict["msg"]["token"]
+            user_token = user_token_dict["login successful"]["token"]
+            driver_token = driver_token_dict["login successful"]["token"]
+            admin_token = admin_token_dict["login successful"]["token"]
 
 
 

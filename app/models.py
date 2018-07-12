@@ -102,7 +102,7 @@ class Users:
             {'email': rows[0], 'user_id': rows[1], 'username': rows[2], 'is_driver': rows[4], 'is_admin': rows[5],
              'exp': datetime.datetime.utcnow()+ datetime.timedelta(weeks=12)}, os.getenv('SECRET_KEY'))
 
-        return {"msg": {"WELCOME TO RIDE_MY_WAY":"copy token to header to  access different functionality", 'token': token.decode('UTF-8')}}
+        return {"login successful": {"WELCOME TO RIDE_MY_WAY":"copy token to header to  access different functionality", 'token': token.decode('UTF-8')}}
 
     @staticmethod
     def get_all_user():

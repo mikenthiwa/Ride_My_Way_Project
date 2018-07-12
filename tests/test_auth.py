@@ -13,7 +13,7 @@ class Auth(ConfigTestCase):
 
         # missing driver token
         ride = {"route": "Komarock-Nairobi", "driver": "Chris"}
-        response = self.client().post('/api/v3/rides', data=json.dumps(ride), content_type='application/json')
+        response = self.client().post('/api/v3/driver/rides', data=json.dumps(ride), content_type='application/json')
         self.assertEqual(response.status_code, 401)
         self.assertIn("Please sign-up and login", str(response.data))
 
@@ -32,7 +32,7 @@ class Auth(ConfigTestCase):
 
         ride = {"route": "Komarock-Nairobi", "driver": "Chris"}
         driver_header = {"Content-Type": "application/json", "x-access-token": "qwertyuioasdfghj"}
-        response = self.client().post('/api/v3/rides', data=json.dumps(ride), content_type='application/json', headers=driver_header)
+        response = self.client().post('/api/v3/driver/rides', data=json.dumps(ride), content_type='application/json', headers=driver_header)
         self.assertEqual(response.status_code, 401)
         self.assertIn("kindly provide a valid token in the header", str(response.data))
 
