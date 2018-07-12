@@ -1,7 +1,7 @@
 venv/*
 env.bat
 .idea/
- .coverage
+.coverage
 app/__pycache__/
 instance/__pycache__/
 resources/__pycache__/
