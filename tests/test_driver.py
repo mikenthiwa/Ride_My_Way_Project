@@ -49,7 +49,6 @@ class DriversEndpoint(ConfigTestCase):
         """Test API can get all requested rides"""
 
         res = self.client().get('/api/v3/requested', headers=self.driver_header)
-        print(res.data)
         self.assertIn("test_user", str(res.data))
         self.assertEqual(res.status_code, 200)
 
