@@ -12,8 +12,8 @@ class DriversEndpoint(ConfigTestCase):
 
     def test_add_ride(self):
         """Test API can add ride"""
-        ride = {"route": "Komarock-Nairobi", "driver": "Chris", "registration_number": "KBG 4854",
-                "vehicle_model": "Toyota", "vehicle_capacity": 4}
+        ride = {"route": "Komarock-Nairobi", "driver": "Chris", "registration number": "KBG 4854",
+                "vehicle model": "Toyota", "vehicle capacity": 4}
         res = self.client().post('/api/v3/driver/rides', data=json.dumps(ride), content_type='application/json',
                                  headers=self.driver_header)
         self.assertIn("Ride has been successfully added", str(res.data))
