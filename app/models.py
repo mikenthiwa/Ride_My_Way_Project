@@ -30,7 +30,8 @@ def create_tables():
                        FOREIGN KEY (driver) REFERENCES users(username) ON DELETE CASCADE ON UPDATE CASCADE)
                        
         """,
-        """ CREATE TABLE request (
+
+        """ CREATE TABLE requests (
                        id SERIAL PRIMARY KEY,
                        ride_id int NOT NULL,
                        username VARCHAR(155) NOT NULL,
@@ -302,15 +303,14 @@ class Rides:
         if ride_id not in output:
             return {"msg": "ride is not available"}, 404
 
-        # cur.execute("SELECT * from users where username='{}'".format(username))
-        # rows_request = cur.fetchone()
 
-        query = "INSERT INTO request (ride_id, username, pickup_point, time, accept) VALUES " \
+        query = "INSERT INTO requests (ride_id, username, pickup_point, time, accept) VALUES " \
                 "(" + str(ride_id) + ", '" + username + "', '" + pickup_point + "', '" + time + "', '" + '0'+ "')"
         cur.execute(query)
         conn.commit()
         conn.close()
         return {"msg": "You have successfully requested a ride"}
+
 
 
 
@@ -320,12 +320,12 @@ class Rides:
 
         conn = psycopg2.connect(os.getenv('database'))
         cur = conn.cursor()
-        cur.execute("SELECT id, username, pickup_point, time, accept from request")
+        cur.execute("SELECT * from requests")
         rows = cur.fetchall()
         output = {}
         for row in rows:
             request_id = row[0]
-            output[request_id] = {"ride_id": row[0], "username": row[1], "pickup_point": row[3]}
+            output[request_id] = {"ride_id": row[0], "username": row[2], "pickup_point": row[3]}
 
         return output
 
@@ -333,32 +333,36 @@ class Rides:
     def get_all_requested_ride_by_id(ride_id):
         conn = psycopg2.connect(os.getenv('database'))
         cur = conn.cursor()
-        cur.execute("SELECT * from request where ride_id='{}'".format(ride_id))
-        rows = cur.fetchone()
+        cur.execute("SELECT * from requests where ride_id='{}'".format(ride_id))
+        rows = cur.fetchall()
         if rows is None:
             return {"msg": "Ride is not available"}
-        return {"request_id": rows[0],
-                "username": rows[2],
-                "pickup_point": rows[3],
-                "time": rows[4]}
+        output = {}
+        for row in rows:
+            output[row[0]] = {"request_id": row[0], "username": row[2], "pickup point": row[3], "time": row[4]}
+
+        return output
 
 
 
     @staticmethod
-    def accept_ride_taken(ride_id):
+    def accept_ride_taken(ride_id, id):
         """Parameter: ride_id"""
 
         conn = psycopg2.connect(os.getenv('database'))
         cur = conn.cursor()
-        cur.execute("SELECT id, username, pickup_point from request")
-        rows = cur.fetchall()
-        output = {}
-        for row in rows:
-            request_id = row[0]
-            output[request_id] = {"ride_id": row[0], "username": row[1], "pickup_point": row[2]}
-        if ride_id not in output:
-            return {"msg": "invalid id"}
-        cur.execute("UPDATE request set accept = '" + '1' + "' where id = '" + str(ride_id) + "'")
+        cur.execute("SELECT * from requests where ride_id='{}'".format(ride_id))
+        rows = cur.fetchone()
+        if rows is None:
+            return {"msg": "Ride is not available"}
+        cur.execute("SELECT * from requests where id='{}'".format(id))
+
+        request_rows = cur.fetchall()
+        # print(request_rows)
+        if request_rows is None:
+            return {"msg": "The request you have selected is not available"}
+
+        cur.execute("UPDATE requests set accept = '" + '1' + "' where id = '" + str(ride_id) + "'")
         conn.commit()
 
         return {"msg": "You have confirmed ride taken"}
