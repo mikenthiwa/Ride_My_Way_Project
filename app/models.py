@@ -225,6 +225,7 @@ class Rides:
         self.vehicle_capacity = vehicle_capacity
 
 
+
     def add_ride(self):
         """Add new ride"""
         conn = psycopg2.connect(os.getenv('database'))
@@ -232,8 +233,9 @@ class Rides:
         cur.execute("SELECT * from rides where route='{}'".format(self.route))
         rows = cur.fetchone()
         if rows is None:
-            query = "INSERT INTO rides (route, driver, vehicle_registration_plate, vehicle_model, vehicle_capacity ) VALUES " \
-                    "('" + self.route + "', '"+ self.driver + "', '" + self.registration_plate + "', '" + self.vehicle_model + "', " + str(self.vehicle_capacity) + ")"
+            query = "INSERT INTO rides (route, driver, vehicle_registration_plate, vehicle_model, vehicle_capacity) VALUES " \
+                    "('" + self.route + "', '"+ self.driver + "', '" + self.registration_plate + "', '" + self.vehicle_model + "'," \
+                    " " + str(self.vehicle_capacity) + ")"
 
             cur.execute(query)
             conn.commit()
@@ -246,13 +248,13 @@ class Rides:
         """Gets all rides"""
         conn = psycopg2.connect(os.getenv('database'))
         cur = conn.cursor()
-        cur.execute("SELECT ride_id, route, driver from rides")
+        cur.execute("SELECT * from rides")
         rows = cur.fetchall()
 
         output = {}
         for row in rows:
             ride_id = row[0]
-            output[ride_id] = {"route": row[1],  "driver": row[2]}
+            output[ride_id] = {"route": row[1],  "driver": row[2], "registration plate": row[3], "vehicle model": row[4], "vehicle capacity": row[5]}
 
         return output
 
