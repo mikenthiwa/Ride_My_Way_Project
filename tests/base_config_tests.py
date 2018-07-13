@@ -42,12 +42,14 @@ class ConfigTestCase(unittest.TestCase):
             conn.close()
 
             # add ride
-            ride_res = Rides("Syo-Nai", "James", "KBZ 481G", "Toyota", 4)
-            ride_res.add_ride()
+            ride1 = Rides("Syo-Nai", "test_driver", "KBZ 481G", "Toyota", 4)
+            ride1.add_ride()
+            ride2 = Rides("Naivasha - Nakuru", "test_driver", "KCN 541F", "NISSAN", 14)
+            ride2.add_ride()
 
             # request ride
-            res = Rides.request_ride(1,username="Ken", pickup_point="TRM", time="5:00")
-
+            Rides.request_ride(1,username="test_user", pickup_point="TRM", time="5:00")
+            Rides.request_ride(2, username="test_user", pickup_point="Naivasha", time="9:00")
 
             test_user_cred = {"email": "test_user@gmail.com", "password": "123456789"}
             test_driver_cred = {"email": "test_driver@gmail.com", "password": "123456789"}
