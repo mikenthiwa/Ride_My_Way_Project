@@ -13,7 +13,7 @@ def create_tables():
         CREATE TABLE users (
             user_id SERIAL PRIMARY KEY,
             email VARCHAR(150) NOT NULL,
-            username VARCHAR(100) NOT NULL,
+            username VARCHAR(100) UNIQUE NOT NULL,
             password VARCHAR(450) NOT NULL,
             is_driver BOOLEAN NULL,
             is_admin BOOLEAN NULL)
@@ -26,7 +26,8 @@ def create_tables():
                        vehicle_registration_plate VARCHAR(100) NOT NULL,
                        vehicle_model VARCHAR(100) NOT NULL,
                        vehicle_capacity int NOT NULL,
-                       status VARCHAR(80) NOT NULL)
+                       status VARCHAR(80) NOT NULL,
+                       FOREIGN KEY (driver) REFERENCES users(username) ON DELETE CASCADE ON UPDATE CASCADE)
                        
         """,
         """ CREATE TABLE request (
@@ -36,7 +37,8 @@ def create_tables():
                        pickup_point VARCHAR(150) NOT NULL,
                        time VARCHAR(150) NOT NULL,
                        accept BOOLEAN NULL,
-                       FOREIGN KEY (ride_id) REFERENCES rides(ride_id) ON DELETE CASCADE)
+                       FOREIGN KEY (ride_id) REFERENCES rides(ride_id) ON DELETE CASCADE ON UPDATE CASCADE,
+                       FOREIGN KEY (username) REFERENCES users(username) ON DELETE CASCADE ON UPDATE CASCADE)
         """
         )
     conn = None
@@ -300,16 +302,16 @@ class Rides:
         if ride_id not in output:
             return {"msg": "ride is not available"}, 404
 
-        cur.execute("SELECT * from request where username='{}'".format(username))
-        rows_request = cur.fetchone()
-        if rows_request is None:
-            query = "INSERT INTO request (ride_id, username, pickup_point, time, accept) VALUES " \
-                    "('" + str(ride_id) + "', '" + username + "', '" + pickup_point + "', '" + time + "', '" + '0'+ "')"
-            cur.execute(query)
-            conn.commit()
-            conn.close()
-            return {"msg": "You have successfully requested a ride"}
-        return {"msg": "you have already requested"}
+        # cur.execute("SELECT * from users where username='{}'".format(username))
+        # rows_request = cur.fetchone()
+
+        query = "INSERT INTO request (ride_id, username, pickup_point, time, accept) VALUES " \
+                "(" + str(ride_id) + ", '" + username + "', '" + pickup_point + "', '" + time + "', '" + '0'+ "')"
+        cur.execute(query)
+        conn.commit()
+        conn.close()
+        return {"msg": "You have successfully requested a ride"}
+
 
 
     @staticmethod

@@ -49,7 +49,7 @@ class DriversEndpoint(ConfigTestCase):
         """Test API can get all requested rides"""
 
         res = self.client().get('/api/v3/requested', headers=self.driver_header)
-        self.assertIn("Ken", str(res.data))
+        self.assertIn("test_user", str(res.data))
         self.assertEqual(res.status_code, 200)
 
     def test_modify_route(self):
@@ -63,7 +63,7 @@ class DriversEndpoint(ConfigTestCase):
 
     def test_modify_ride_driver(self):
         """Test API can modify driver's name"""
-        driver = {"driver": "Francis Ole Kaparo"}
+        driver = {"driver": "test_driver"}
         response = self.client().put('/api/v3/driver/rides/1', data=json.dumps(driver), content_type='application/json',
                                      headers=self.driver_header)
         self.assertEqual(response.status_code, 200)
