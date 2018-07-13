@@ -1,0 +1,10 @@
+venv/*
+env.bat
+.idea/
+.coverage
+app/__pycache__/
+instance/__pycache__/
+resources/__pycache__/
+tests/__pycache__/
+.pytest_cache/
+htmlcov/
