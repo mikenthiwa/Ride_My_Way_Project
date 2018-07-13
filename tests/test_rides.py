@@ -25,8 +25,8 @@ class RidesEndpoint(ConfigTestCase):
     def test_request_ride(self):
         """Test API can request a ride"""
 
-        data = {"username": "james", "pickup_point": "syo", "time": "8:00"}
-        res = self.client().post('/api/v3/rides/2/requests', data=json.dumps(data),
+        data = {"pickup_point": "syo", "time": "8:00"}
+        res = self.client().post('/api/v3/rides/2/request', data=json.dumps(data),
                                  content_type='application/json', headers=self.user_header)
         self.assertIn("You have successfully requested a ride", str(res.data))
         self.assertEqual(res.status_code, 200)

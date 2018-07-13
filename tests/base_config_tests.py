@@ -49,6 +49,7 @@ class ConfigTestCase(unittest.TestCase):
 
             # request ride
             Rides.request_ride(1,username="test_user", pickup_point="TRM", time="5:00")
+            Rides.request_ride(1, username="test_user", pickup_point="PAC", time="5:00")
             Rides.request_ride(2, username="test_user", pickup_point="Naivasha", time="9:00")
 
             test_user_cred = {"email": "test_user@gmail.com", "password": "123456789"}
@@ -85,7 +86,7 @@ class ConfigTestCase(unittest.TestCase):
         with self.app.app_context():
             conn = psycopg2.connect(os.getenv('database'))
             cur = conn.cursor()
-            cur.execute("DROP TABLE users, rides, request")
+            cur.execute("DROP TABLE users, rides, requests")
             conn.commit()
 
 if __name__ == '__main__':

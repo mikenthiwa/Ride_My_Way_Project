@@ -103,14 +103,14 @@ class AcceptRide(Resource):
 
     @api.doc(security='apikey')
     # @driver_required
-    def put(self, ride_id):
+    def put(self, ride_id, request_id):
         """Parameter: ride_id"""
 
-        res = Rides.accept_ride_taken(ride_id=ride_id)
+        res = Rides.accept_ride_taken(ride_id=ride_id, id=request_id)
         return res
 
 api.add_resource(DriverRide, '/driver/rides')
-api.add_resource(AcceptRide, '/driver/rides/<int:ride_id>/accept')
+api.add_resource(AcceptRide, '/driver/rides/<int:ride_id>/requests/<int:request_id>')
 api.add_resource(ModifyRide, '/driver/rides/<int:ride_id>')
 api.add_resource(RequestedRide, '/requested', endpoint='requested')
 api.add_resource(RequestRidebyId, '/driver/rides/<int:ride_id>/requests')
