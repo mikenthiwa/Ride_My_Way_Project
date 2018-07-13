@@ -343,8 +343,6 @@ class Rides:
 
         return output
 
-
-
     @staticmethod
     def accept_ride_taken(ride_id, id):
         """Parameter: ride_id"""
