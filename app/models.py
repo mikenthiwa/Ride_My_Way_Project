@@ -27,6 +27,7 @@ def create_tables():
                        vehicle_model VARCHAR(100) NOT NULL,
                        vehicle_capacity int NOT NULL,
                        status VARCHAR(80) NOT NULL)
+                       
         """,
         """ CREATE TABLE request (
                        id SERIAL PRIMARY KEY,
@@ -34,7 +35,8 @@ def create_tables():
                        username VARCHAR(155) NOT NULL,
                        pickup_point VARCHAR(150) NOT NULL,
                        time VARCHAR(150) NOT NULL,
-                       accept BOOLEAN NULL)
+                       accept BOOLEAN NULL,
+                       FOREIGN KEY (ride_id) REFERENCES rides(ride_id) ON DELETE CASCADE)
         """
         )
     conn = None
