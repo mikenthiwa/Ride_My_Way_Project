@@ -25,7 +25,8 @@ def create_tables():
                        driver VARCHAR(150) NOT NULL,
                        vehicle_registration_plate VARCHAR(100) NOT NULL,
                        vehicle_model VARCHAR(100) NOT NULL,
-                       vehicle_capacity int NOT NULL)
+                       vehicle_capacity int NOT NULL,
+                       status VARCHAR(80) NOT NULL)
         """,
         """ CREATE TABLE request (
                        id SERIAL PRIMARY KEY,
@@ -217,13 +218,13 @@ class Users:
 class Rides:
     """Contains methods for class ride"""
 
-    def __init__(self, route, driver, registration_plate, vehicle_model, vehicle_capacity):
+    def __init__(self, route, driver, registration_plate, vehicle_model, vehicle_capacity, status="available"):
         self.route = route
         self.driver = driver
         self.registration_plate = registration_plate
         self.vehicle_model = vehicle_model
         self.vehicle_capacity = vehicle_capacity
-
+        self.status = status
 
 
     def add_ride(self):
@@ -233,9 +234,9 @@ class Rides:
         cur.execute("SELECT * from rides where route='{}'".format(self.route))
         rows = cur.fetchone()
         if rows is None:
-            query = "INSERT INTO rides (route, driver, vehicle_registration_plate, vehicle_model, vehicle_capacity) VALUES " \
+            query = "INSERT INTO rides (route, driver, vehicle_registration_plate, vehicle_model, vehicle_capacity, status) VALUES " \
                     "('" + self.route + "', '"+ self.driver + "', '" + self.registration_plate + "', '" + self.vehicle_model + "'," \
-                    " " + str(self.vehicle_capacity) + ")"
+                    " " + str(self.vehicle_capacity) + ", '" + self.status + "')"
 
             cur.execute(query)
             conn.commit()
@@ -254,7 +255,8 @@ class Rides:
         output = {}
         for row in rows:
             ride_id = row[0]
-            output[ride_id] = {"route": row[1],  "driver": row[2], "registration plate": row[3], "vehicle model": row[4], "vehicle capacity": row[5]}
+            output[ride_id] = {"route": row[1],  "driver": row[2], "registration plate": row[3],
+                               "vehicle model": row[4], "vehicle capacity": row[5], "status": row[6]}
 
         return output
 
