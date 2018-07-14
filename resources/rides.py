@@ -59,7 +59,7 @@ class RequestRide(Resource):
         # Drivers cannot request their rides
         if not is_driver:
             res = Rides.request_ride(ride_id=ride_id, username=driver_name, pickup_point=pickup_point, time=time)
-            return res
+            return res, 201
         return {"msg": "Driver cannot request his own ride"}
 
 api.add_resource(RideList, '/rides', endpoint='ridelist')

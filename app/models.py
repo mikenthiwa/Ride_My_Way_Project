@@ -312,8 +312,6 @@ class Rides:
         return {"msg": "You have successfully requested a ride"}
 
 
-
-
     @staticmethod
     def get_all_requested_rides():
         """Driver gets all requested ride"""
@@ -325,7 +323,7 @@ class Rides:
         output = {}
         for row in rows:
             request_id = row[0]
-            output[request_id] = {"ride_id": row[0], "username": row[2], "pickup_point": row[3]}
+            output[request_id] = {"request_id": row[0], "ride_id": row[1], "username": row[2], "pickup_point": row[3]}
 
         return output
 
