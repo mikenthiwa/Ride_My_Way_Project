@@ -1,10 +1,10 @@
 # app/__init__.py
 
-from flask import Flask, request
+from flask import Flask
 from flask_restplus import Api
 
 
-from instance.config import app_config, config
+from instance.config import app_config
 
 
 def create_app(config_name):
