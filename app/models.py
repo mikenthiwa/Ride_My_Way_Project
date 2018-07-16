@@ -120,10 +120,14 @@ class Users:
         cur = conn.cursor()
         cur.execute("SELECT * from users")
         rows = cur.fetchall()
-        output = {}
+        output = []
         for row in rows:
-            user_email = row[0]
-            output[user_email] = {'username': row[1], 'password': row[2], 'is_driver': row[3], 'is_admin': row[4]}
+            data = {}
+            data["user id"] = row[0]
+            data["email"] = row[1]
+            data["username"] = row[2]
+            data["password"] = row[3]
+            output.append(data)
             conn.close()
         return output
 
