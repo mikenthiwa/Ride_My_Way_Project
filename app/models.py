@@ -138,16 +138,12 @@ class Users:
 
         conn = psycopg2.connect(os.getenv('database'))
         cur = conn.cursor()
-        cur.execute("SELECT email, username, password, is_driver, is_admin from users;")
-        rows = cur.fetchall()
-        output = {}
-        for row in rows:
-            user_email = row[0]
-            output[user_email] = {'username': row[1], 'password': row[2], 'is_driver': row[3], 'is_admin': row[4]}
-        if email in output:
-            return {'email': email, 'username': output[email]['username'], 'is_driver': output[email]['is_driver']}
-
-        return {"msg": "Email is not available"}
+        cur.execute("SELECT * from users where email = '{}'".format(email))
+        row = cur.fetchone()
+        if row is None:
+            return {"msg": "The email you entered does not exist!"}
+        return {"user id": row[0], "email": row[1], "username": row[2],
+                "password": row[3], "is_driver": row[4], "is_admin": row[5]}
 
     def add_driver(self):
         """Creates new user"""

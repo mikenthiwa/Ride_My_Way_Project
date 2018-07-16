@@ -37,7 +37,7 @@ class AdminEndpoint(ConfigTestCase):
 
         # invalid user
         res = self.client().get('/api/v3/admin/users/chris@gmail.com', headers=self.admin_header)
-        self.assertIn("Email is not available", str(res.data))
+        self.assertIn("The email you entered does not exist!", str(res.data))
 
 
 
