@@ -123,10 +123,12 @@ class Users:
         output = []
         for row in rows:
             data = {}
-            data["user id"] = row[0]
+            data["user_id"] = row[0]
             data["email"] = row[1]
             data["username"] = row[2]
             data["password"] = row[3]
+            data["is_driver"] = row[4]
+            data["is_admin"] = row[5]
             output.append(data)
             conn.close()
         return output
@@ -142,7 +144,7 @@ class Users:
         row = cur.fetchone()
         if row is None:
             return {"msg": "The email you entered does not exist!"}
-        return {"user id": row[0], "email": row[1], "username": row[2],
+        return {"user_id": row[0], "email": row[1], "username": row[2],
                 "password": row[3], "is_driver": row[4], "is_admin": row[5]}
 
     def add_driver(self):
