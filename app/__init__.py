@@ -2,7 +2,7 @@
 
 from flask import Flask
 from flask_restplus import Api
-
+from flask_cors import CORS
 
 from instance.config import app_config
 
@@ -18,6 +18,7 @@ def create_app(config_name):
     app.config.from_pyfile('config.py')
     app.url_map.strict_slashes = False
 
+    CORS(app)
     # Enable swagger editor
     app.config['SWAGGER_UI_JSONEDITOR'] = True
 
@@ -29,6 +30,8 @@ def create_app(config_name):
               description='Ride-My-Way is a carpooling application that provides'
                           ' drivers with the ability to create ride'
                           ' offers and passengers to join available ride offers.')
+
+
 
     from resources.signup_login import api as reg_login
     api.add_namespace(reg_login, path='/api/v3')

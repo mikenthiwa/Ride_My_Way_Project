@@ -22,13 +22,13 @@ model_login = api.model('Login', {'email': fields.String,
 class Register(Resource):
     """class contain POST method"""
     parser = reqparse.RequestParser()
-    parser.add_argument('username', required=True, help="No username provided", location=['json'])
+    parser.add_argument('username', required=True, help="No username provided", location=['json', 'form'])
 
-    parser.add_argument('email', required=True, help="No email provided", location=['json'])
+    parser.add_argument('email', required=True, help="No email provided", location=['json', 'form'])
 
-    parser.add_argument('password', required=True, help="No password provided", location=['json'])
+    parser.add_argument('password', required=True, help="No password provided", location=['json', 'form'])
 
-    parser.add_argument('is_driver', required=False, location=['json'])
+    parser.add_argument('is_driver', required=False, location=['json', 'form'])
 
     @api.expect(model_register)
     def post(self):
@@ -55,9 +55,9 @@ class Register(Resource):
 
         if driver == "True":
             driver_res = Users(username=username, email=email, password=password, is_driver=True)
-            return driver_res.add_driver()
+            return driver_res.add_driver(), 201
         user_res = Users(username=username, email=email, password=password)
-        return user_res.add_users()
+        return user_res.add_users(), 201
 
 
 

@@ -88,7 +88,7 @@ class Users:
             conn.commit()
             conn.close()
 
-            return {"msg": "You have been successfully added!, log in"}, 201
+            return {"msg": "Your account has been successfully created"}, 201
         return {"msg": 'Account cannot be created!, the email you entered already exists'}, 401
 
     @staticmethod
@@ -160,7 +160,7 @@ class Users:
             cur.execute(query)
             conn.commit()
             conn.close()
-            return {"msg": "You have been successfully added"}, 201
+            return {"msg": "Your account has been successfully created"}, 201
 
         return {"msg": 'email is already available'}, 401
 
