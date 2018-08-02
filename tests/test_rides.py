@@ -19,7 +19,7 @@ class RidesEndpoint(ConfigTestCase):
         """Test API for invalid ride"""
 
         res = self.client().get('/api/v3/rides/105', headers=self.user_header)
-        self.assertIn("ride is not available", str(res.data))
+        self.assertIn("The ride id you entered does not exist", str(res.data))
         self.assertEqual(res.status_code, 404)
 
     def test_request_ride(self):

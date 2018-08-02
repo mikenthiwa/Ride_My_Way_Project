@@ -160,9 +160,9 @@ class Users:
             cur.execute(query)
             conn.commit()
             conn.close()
-            return {"msg": "Your account has been successfully created"}, 201
+            return {"msg": "Your account has been successfully created"}
 
-        return {"msg": 'email is already available'}, 401
+        return {"msg": 'Account cannot be created!, the email you entered already exists'}
 
     @staticmethod
     def modify_username(email, username):
@@ -284,7 +284,7 @@ class Rides:
         row = cur.fetchone()
 
         if row is None:
-            return {"mgs": "The ride id you entered does not exist"}
+            return {"mgs": "The ride id you entered does not exist"}, 404
         return {"ride_id": row[0],
                  "route": row[1],
                  "driver": row[2],
