@@ -112,5 +112,5 @@ class AcceptRide(Resource):
 api.add_resource(DriverRide, '/driver/rides')
 api.add_resource(AcceptRide, '/driver/rides/<int:ride_id>/requests/<int:request_id>')
 api.add_resource(ModifyRide, '/driver/rides/<int:ride_id>')
-api.add_resource(RequestedRide, '/requested', endpoint='requested')
+api.add_resource(RequestedRide, '/driver/requests', endpoint='requested')
 api.add_resource(RequestRidebyId, '/driver/rides/<int:ride_id>/requests')

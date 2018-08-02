@@ -5,6 +5,7 @@ from app.models import Users
 import re
 
 EMAIL_REGEX = re.compile(r"^[a-zA-Z0-9_\.]+@[a-zA-Z0-9\.]+\.[a-zA-Z]*$")
+valid_name = re.compile(r"^[a-zA-Z]")
 
 
 api = Namespace('SignUp and Login', description='Sign-up and Login')
@@ -44,6 +45,12 @@ class Register(Resource):
 
         if username == "":
             return {"msg": "Username cannot be empty"}
+
+        if len(username) < 5:
+            return {"msg": "The username you provided is short"}, 422
+
+        if not re.match(valid_name, username):
+            return {"msg": "Please provide a valid username"}
         if email == "":
             return {"msg": "Email cannot be empty"}
 

@@ -88,7 +88,7 @@ class Users:
             conn.commit()
             conn.close()
 
-            return {"msg": "Your account has been successfully created"}, 201
+            return {"msg": "Your account has been successfully created"}
         return {"msg": 'Account cannot be created!, the email you entered already exists'}, 401
 
     @staticmethod
@@ -259,11 +259,17 @@ class Rides:
         cur.execute("SELECT * from rides")
         rows = cur.fetchall()
 
-        output = {}
+        output = []
         for row in rows:
-            ride_id = row[0]
-            output[ride_id] = {"route": row[1],  "driver": row[2], "registration plate": row[3],
-                               "vehicle model": row[4], "vehicle capacity": row[5], "status": row[6]}
+            data = {}
+            data["ride_id"] =row[0]
+            data["route"] = row[1]
+            data["driver"] = row[2]
+            data["registration_plate"] = row[3]
+            data["vehicle_model"] = row[4]
+            data["vehicle_capacity"] = row[5]
+            data["status"] = row[6]
+            output.append(data)
 
         return output
 
@@ -274,18 +280,17 @@ class Rides:
         Ride_Id"""
         conn = psycopg2.connect(os.getenv('database'))
         cur = conn.cursor()
-        cur.execute("SELECT ride_id, route, driver from rides")
-        rows = cur.fetchall()
+        cur.execute("SELECT * from rides where ride_id='{}'".format(ride_id))
+        row = cur.fetchone()
 
-        output = {}
-        for row in rows:
-            id = row[0]
-            output[id] = {"route": row[1], "driver": row[2]}
-        if ride_id not in output:
-            return {"msg": "ride is not available"}, 404
-        ride = output[ride_id]
-
-        return ride
+        if row is None:
+            return {"mgs": "The ride id you entered does not exist"}
+        return {"ride_id": row[0],
+                 "route": row[1],
+                 "driver": row[2],
+                "vehicle_model": row[3],
+                "vehicle_capacity": row[4],
+                 "status": row[5]}
 
     @staticmethod
     def request_ride(ride_id, username, pickup_point, time):
@@ -322,25 +327,38 @@ class Rides:
         cur = conn.cursor()
         cur.execute("SELECT * from requests")
         rows = cur.fetchall()
-        output = {}
+        output = []
         for row in rows:
-            request_id = row[0]
-            output[request_id] = {"request_id": row[0], "ride_id": row[1], "username": row[2], "pickup_point": row[3]}
+            data = {}
+
+            data["request_id"] = row[0]
+            data["ride_id"] = row[1]
+            data["username"] = row[2]
+            data["pickup_point"] = row[3]
+            data["time"] = row[4]
+            output.append(data)
 
         return output
 
     @staticmethod
     def get_all_requested_ride_by_id(ride_id):
+        """Parameters required ride id"""
+
         conn = psycopg2.connect(os.getenv('database'))
         cur = conn.cursor()
         cur.execute("SELECT * from requests where ride_id='{}'".format(ride_id))
         rows = cur.fetchall()
         if rows is None:
             return {"msg": "Ride is not available"}
-        output = {}
+        output = []
         for row in rows:
-            output[row[0]] = {"request_id": row[0], "username": row[2], "pickup point": row[3], "time": row[4]}
+            data = {}
+            data["request_id"] = row[0]
+            data["username"]= row[2]
+            data["pickup_point"] = row[3]
+            data["time"] = row[4]
 
+            output.append(data)
         return output
 
     @staticmethod
