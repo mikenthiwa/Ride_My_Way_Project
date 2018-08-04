@@ -10,7 +10,8 @@ import jwt
 
 
 api = Namespace("Driver",  description="Driver related operations")
-ride_model = api.model("Ride", {'route': fields.String,
+ride_model = api.model("Ride", {'origin': fields.String,
+                                'destination': fields.String,
                                 'registration number': fields.String,
                                 'vehicle model': fields.String,
                                 'vehicle capacity': fields.Integer})
@@ -25,7 +26,8 @@ class DriverRide(Resource):
     def post(self):
         """Add a ride endpoint"""
         parser = reqparse.RequestParser()
-        parser.add_argument('route', type=str, required=True, help="Route is not provided", location=['json'])
+        parser.add_argument('origin', type=str, required=True, help="Route is not provided", location=['json'])
+        parser.add_argument('destination', type=str, required=True, help="Route is not provided", location=['json'])
         parser.add_argument('registration number', type=str, required=True, help="Registration number is not provided", location=['json'])
         parser.add_argument('vehicle model', type=str, required=True, help="Vehicle model is not provided", location=['json'])
         parser.add_argument('vehicle capacity', type=int, required=True, help="vehicle capacity is not provided", location=['json'])
@@ -35,7 +37,10 @@ class DriverRide(Resource):
         driver = data['username']
 
         args = parser.parse_args()
-        res = Rides(args['route'], driver=driver, registration_plate=args['registration number'],
+        origin = args["origin"]
+        destination = args["destination"]
+        route = origin + " - " + destination
+        res = Rides(route=route, driver=driver, registration_plate=args['registration number'],
                     vehicle_model=args['vehicle model'], vehicle_capacity=args['vehicle capacity'])
         return res.add_ride(), 201
 

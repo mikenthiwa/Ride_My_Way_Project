@@ -258,6 +258,8 @@ class Rides:
         cur = conn.cursor()
         cur.execute("SELECT * from rides")
         rows = cur.fetchall()
+        if len(rows) == 0:
+            return {"msg": "There are no available rides yet!"}
 
         output = []
         for row in rows:
@@ -282,15 +284,15 @@ class Rides:
         cur = conn.cursor()
         cur.execute("SELECT * from rides where ride_id='{}'".format(ride_id))
         row = cur.fetchone()
-
         if row is None:
-            return {"mgs": "The ride id you entered does not exist"}, 404
+            return {"msg": "The ride id you entered does not exist"}, 404
         return {"ride_id": row[0],
                  "route": row[1],
                  "driver": row[2],
-                "vehicle_model": row[3],
-                "vehicle_capacity": row[4],
-                 "status": row[5]}
+                "registration_plate": row[3],
+                "vehicle_model": row[4],
+                "vehicle_capacity": row[5],
+                 "status": row[6]}
 
     @staticmethod
     def request_ride(ride_id, username, pickup_point, time):
