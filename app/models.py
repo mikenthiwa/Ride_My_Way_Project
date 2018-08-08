@@ -478,3 +478,4 @@ class Rides:
         conn.commit()
         return {"msg": "Ride has been successfully deleted"}
 
+

@@ -12,7 +12,7 @@ class DriversEndpoint(ConfigTestCase):
 
     def test_add_ride(self):
         """Test API can add ride"""
-        ride = {"route": "Komarock-Nairobi", "driver": "Chris", "registration number": "KBG 4854",
+        ride = {"origin": "Komarock", "destination": "Nairobi", "driver": "Chris", "registration number": "KBG 4854",
                 "vehicle model": "Toyota", "vehicle capacity": 4}
         res = self.client().post('/api/v3/driver/rides', data=json.dumps(ride), content_type='application/json',
                                  headers=self.driver_header)
@@ -42,7 +42,7 @@ class DriversEndpoint(ConfigTestCase):
         """Test API driver can accept ride"""
 
         res = self.client().put('/api/v3/driver/rides/1/requests/2', headers=self.driver_header)
-        self.assertIn("You have confirmed ride taken", str(res.data))
+        self.assertIn("You have accepted the ride", str(res.data))
         self.assertEqual(res.status_code, 200)
 
     def test_get_all_requested_rides(self):
