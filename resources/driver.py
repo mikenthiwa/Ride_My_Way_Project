@@ -44,6 +44,20 @@ class DriverRide(Resource):
                     vehicle_model=args['vehicle model'], vehicle_capacity=args['vehicle capacity'])
         return res.add_ride(), 201
 
+    @api.doc(security='apikey')
+    @driver_required
+    def get(self):
+        """:parameter username
+        get all rides given by a specific driver"""
+
+        token = request.headers['x-access-token']
+        data = jwt.decode(token, Config.SECRET)
+        driver = data['username']
+
+        res = Rides.get_ride_by_name(username=driver)
+        return res
+
+
 class ModifyRide(Resource):
     "Contain GET PUT method"
 

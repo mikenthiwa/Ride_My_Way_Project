@@ -294,6 +294,34 @@ class Rides:
                 "vehicle_capacity": row[5],
                  "status": row[6]}
 
+
+    @staticmethod
+    def  get_ride_by_name(username):
+        """:param
+        Username"""
+
+        conn = psycopg2.connect(os.getenv('database'))
+        cur = conn.cursor()
+        cur.execute("SELECT * from rides where driver='{}'".format(username))
+        rows = cur.fetchall()
+        if len(rows) == 0:
+            return {"msg":"You have not offered any rides yet!"}
+
+        output = []
+        for row in rows:
+            data = {}
+            data["ride_id"] = row[0]
+            data["route"] = row[1]
+            data["driver"] = row[2]
+            data["registration_plate"] = row[3]
+            data["vehicle_model"] = row[4]
+            data["vehicle_capacity"] = row[5]
+            data["status"] = row[6]
+
+            output.append(data)
+
+        return output
+
     @staticmethod
     def request_ride(ride_id, username, pickup_point, time):
         """Request a ride
@@ -383,7 +411,7 @@ class Rides:
         cur.execute("UPDATE requests set accept = '" + '1' + "' where id = '" + str(ride_id) + "'")
         conn.commit()
 
-        return {"msg": "You have confirmed ride taken"}
+        return {"msg": "You have accepted the ride"}
 
     @staticmethod
     def modify_driver(ride_id, driver):
