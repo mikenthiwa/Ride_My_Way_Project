@@ -88,7 +88,7 @@ class Users:
             conn.commit()
             conn.close()
 
-            return {"msg": "Your account has been successfully created"}
+            return {"msg": "Your account has been successfully created, login"}
         return {"msg": 'Account cannot be created!, the email you entered already exists'}, 401
 
     @staticmethod
