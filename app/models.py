@@ -9,6 +9,7 @@ from instance.config import config, Config
 
 def create_tables():
     """ create tables in the PostgreSQL database"""
+
     commands = ("""
         CREATE TABLE users (
             user_id SERIAL PRIMARY KEY,
