@@ -28,7 +28,7 @@ class DriversEndpoint(ConfigTestCase):
         """Test API can get ride for driver"""
 
         res = self.client().get('/api/v3/rides/1', headers=self.user_header)
-        self.assertIn("Syo-Nai", str(res.data))
+        self.assertIn("Syo - Nai", str(res.data))
         self.assertEqual(res.status_code, 200)
 
     def test_add_ride_without_route(self):
@@ -36,7 +36,7 @@ class DriversEndpoint(ConfigTestCase):
         ride = {"driver": "Chris", "time": "9:00"}
         res = self.client().post('/api/v3/driver/rides', data=json.dumps(ride), headers=self.driver_header,
                                  content_type='application/json')
-        self.assertIn("Route is not provided Missing required parameter in the JSON body", str(res.data))
+        self.assertIn("origin is not provided Missing required parameter in the JSON body or the post body", str(res.data))
 
     def test_accept_ride(self):
         """Test API driver can accept ride"""

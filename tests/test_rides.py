@@ -13,7 +13,7 @@ class RidesEndpoint(ConfigTestCase):
 
         res = self.client().get('/api/v3/rides', headers=self.user_header)
         self.assertEqual(res.status_code, 200)
-        self.assertIn("Syo-Nai", str(res.data))
+        self.assertIn("Syo - Nai", str(res.data))
 
     def test_get_invalid_ride(self):
         """Test API for invalid ride"""

@@ -42,7 +42,7 @@ class ConfigTestCase(unittest.TestCase):
             conn.close()
 
             # add ride
-            ride1 = Rides("Syo-Nai", "test_driver", "KBZ 481G", "Toyota", 4)
+            ride1 = Rides("Syo - Nai", "test_driver", "KBZ 481G", "Toyota", 4)
             ride1.add_ride()
             ride2 = Rides("Naivasha - Nakuru", "test_driver", "KCN 541F", "NISSAN", 14)
             ride2.add_ride()
