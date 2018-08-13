@@ -26,8 +26,8 @@ class DriverRide(Resource):
     def post(self):
         """Add a ride endpoint"""
         parser = reqparse.RequestParser()
-        parser.add_argument('origin', type=str, required=True, help="Route is not provided", location=['json'])
-        parser.add_argument('destination', type=str, required=True, help="Route is not provided", location=['json'])
+        parser.add_argument('origin', type=str, required=True, help="origin is not provided", location=['json', 'form'])
+        parser.add_argument('destination', type=str, required=True, help="destination is not provided", location=['json', 'form'])
         parser.add_argument('registration number', type=str, required=True, help="Registration number is not provided", location=['json'])
         parser.add_argument('vehicle model', type=str, required=True, help="Vehicle model is not provided", location=['json'])
         parser.add_argument('vehicle capacity', type=int, required=True, help="vehicle capacity is not provided", location=['json'])
