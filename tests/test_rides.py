@@ -5,6 +5,7 @@ import json
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from tests.base_config_tests import ConfigTestCase
 
+
 class RidesEndpoint(ConfigTestCase):
     """This class represents rides test cases"""
 
@@ -30,7 +31,6 @@ class RidesEndpoint(ConfigTestCase):
                                  content_type='application/json', headers=self.user_header)
         self.assertIn("You have successfully requested a ride", str(res.data))
         self.assertEqual(res.status_code, 201)
-
 
 
 if __name__ == '__main__':

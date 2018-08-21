@@ -1,5 +1,5 @@
 import os
-from werkzeug.contrib.fixers import ProxyFix # fix no spec in heroku
+from werkzeug.contrib.fixers import ProxyFix  # fix no spec in heroku
 from app import create_app
 
 

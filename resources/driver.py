@@ -27,7 +27,7 @@ class DriverRide(Resource):
         """Add a ride endpoint"""
         parser = reqparse.RequestParser()
         parser.add_argument('origin', type=str, required=True, help="origin is not provided", location=['json', 'form'])
-        parser.add_argument('destination', type=str, required=True, help="destination is not provided", location=['json', 'form'])
+        parser.add_argument('destination', type=str, required=True, help="destination is not provided", location=['json'])
         parser.add_argument('registration number', type=str, required=True, help="Registration number is not provided", location=['json'])
         parser.add_argument('vehicle model', type=str, required=True, help="Vehicle model is not provided", location=['json'])
         parser.add_argument('vehicle capacity', type=int, required=True, help="vehicle capacity is not provided", location=['json'])
@@ -127,6 +127,7 @@ class AcceptRide(Resource):
 
         res = Rides.accept_ride_taken(ride_id=ride_id, id=request_id)
         return res
+
 
 api.add_resource(DriverRide, '/driver/rides')
 api.add_resource(AcceptRide, '/driver/rides/<int:ride_id>/requests/<int:request_id>')

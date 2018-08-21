@@ -62,6 +62,20 @@ class RequestRide(Resource):
             return res, 201
         return {"msg": "Driver cannot request his own ride"}
 
+
+class Profile(Resource):
+    """Contains get method"""
+
+    @token_required
+    def get(self):
+        token = request.headers['x-access-token']
+        data = jwt.decode(token, Config.SECRET)
+        driver_name = data['username']
+        res = Rides.get_requested_ride_by_name(username=driver_name)
+        return res
+
+
 api.add_resource(RideList, '/rides', endpoint='ridelist')
+api.add_resource(Profile, '/profile')
 api.add_resource(Ride, '/rides/<int:ride_id>')
 api.add_resource(RequestRide, '/rides/<int:ride_id>/request')

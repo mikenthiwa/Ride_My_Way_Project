@@ -295,9 +295,8 @@ class Rides:
                 "vehicle_capacity": row[5],
                  "status": row[6]}
 
-
     @staticmethod
-    def  get_ride_by_name(username):
+    def get_ride_by_name(username):
         """:param
         Username"""
 
@@ -306,7 +305,7 @@ class Rides:
         cur.execute("SELECT * from rides where driver='{}'".format(username))
         rows = cur.fetchall()
         if len(rows) == 0:
-            return {"msg":"You have not offered any rides yet!"}
+            return {"msg": "You have not offered any rides yet!"}
 
         output = []
         for row in rows:
@@ -348,6 +347,31 @@ class Rides:
         conn.commit()
         conn.close()
         return {"msg": "You have successfully requested a ride"}
+
+    @staticmethod
+    def get_requested_ride_by_name(username):
+        """:param
+        username"""
+
+        conn = psycopg2.connect(os.getenv('database'))
+        cur = conn.cursor()
+        cur.execute("SELECT * from requests where username='{}'".format(username))
+        rows = cur.fetchall()
+        print(rows)
+        if len(rows) is 0:
+            return {"msg": "You have not taken any ride"}
+
+        output = []
+        for row in rows:
+            data = {}
+            data["request_id"] = row[0]
+            data["ride_id"] = row[1]
+            data["username"] = row[2]
+            data["pickup_point"] = row[3]
+            data["time"] = row[4]
+            output.append(data)
+        return output
+
 
 
     @staticmethod
